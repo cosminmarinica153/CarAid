@@ -8,11 +8,11 @@ public class Car {
     private static int NEXT_ID = 1;
     private final int id;
     private int ownerId;
-    private String make;
-    private String model;
-    private int year;
+    private final String make;
+    private final String model;
+    private final int year;
     private int kilometers;
-    private Revisions revisions;
+    private final Revisions revisions;
 
     public Car(int ownerId, String make, String model, int year, int kilometers, Revisions revisions) {
         this.id = NEXT_ID++;
@@ -22,16 +22,6 @@ public class Car {
         this.year = year;
         this.kilometers = kilometers;
         this.revisions = revisions;
-    }
-
-    public Car() {
-        this.id = NEXT_ID++;
-        this.ownerId = 0;
-        this.make = "John";
-        this.model = "Wick";
-        this.year = 0;
-        this.kilometers = 0;
-        this.revisions = new Revisions();
     }
 
     public int getId() {
@@ -50,24 +40,12 @@ public class Car {
         return make;
     }
 
-    public void setMake(String make) {
-        this.make = make;
-    }
-
     public String getModel() {
         return model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-    }
-
     public int getYear() {
         return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 
     public int getKilometers() {
@@ -80,10 +58,6 @@ public class Car {
 
     public Revisions getRevisions() {
         return revisions;
-    }
-
-    public void setRevisions(Revisions revisions) {
-        this.revisions = revisions;
     }
 
     @Override
@@ -132,7 +106,6 @@ public class Car {
         while (matcher.find()) {
             val.add(matcher.group(1));
         }
-        ;
 
         // Prepare the attribute values
         int ownerId = Integer.parseInt(val.get(0));
@@ -152,19 +125,18 @@ public class Car {
         while (matcher.find()) {
             val.add(matcher.group(1));
         }
-        ;
 
         // Preparing revisions attributes
         // We will parse the matched values by parsing the value string to an array list
         // that contains the values of the integers, parsed from their string counterpart
 
         // Engine Oil Changes
-        temp = val.get(0);
+        temp = val.getFirst();
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for (int i = 0; i < tempArr.length; i++)
-            arrList.add(Integer.parseInt(tempArr[i]));
+        for (String string : tempArr)
+            arrList.add(Integer.parseInt(string));
         int[] engineOilChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
         // Transmission Oil Changes
@@ -172,8 +144,8 @@ public class Car {
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for (int i = 0; i < tempArr.length; i++)
-            arrList.add(Integer.parseInt(tempArr[i]));
+        for (String string : tempArr)
+            arrList.add(Integer.parseInt(string));
         int[] transmissionOilChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
         // Brake Pads Changes
@@ -181,8 +153,8 @@ public class Car {
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for (int i = 0; i < tempArr.length; i++)
-            arrList.add(Integer.parseInt(tempArr[i]));
+        for (String string : tempArr)
+            arrList.add(Integer.parseInt(string));
         int[] brakePadsChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
         // Brake Fluid Changes
@@ -190,11 +162,11 @@ public class Car {
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for (int i = 0; i < tempArr.length; i++)
-            arrList.add(Integer.parseInt(tempArr[i]));
+        for (String string : tempArr)
+            arrList.add(Integer.parseInt(string));
         int[] brakeFluidChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
-        // Initiate the a revision object using the values extracted
+        // Initiate the revision object using the values extracted
         Revisions revisions = new Revisions(engineOilChanges, transmissionOilChanges, brakePadsChanges, brakeFluidChanges);
 
         // Return a new object of type car, created from the string
@@ -238,20 +210,20 @@ public class Car {
         int[] arr = new int[revisions.getTransmissionOil().length + 1];
         arr[arr.length - 1] = km;
 
-        revisions.setEngineOil(arr);
+        revisions.setTransmissionOil(arr);
     }
 
     public void addBrakePadsChange(int km) {
         int[] arr = new int[revisions.getBrakePads().length + 1];
         arr[arr.length - 1] = km;
 
-        revisions.setEngineOil(arr);
+        revisions.setBrakePads(arr);
     }
 
     public void addBrakeFluidChange(int km) {
         int[] arr = new int[revisions.getBrakeFluid().length + 1];
         arr[arr.length - 1] = km;
 
-        revisions.setEngineOil(arr);
+        revisions.setBrakeFluid(arr);
     }
 }

@@ -9,17 +9,8 @@ public final class Api {
     public static Owner[] owners = Data.loadOwners();
 
     // GET REQUESTS
-    public static Owner getOwner(int id) {
-        for (Owner owner : owners) {
-            if (owner.getId() == id)
-                return owner;
-        }
-
-        return null;
-    }
-
     public static Car[] getOwnerCars(int ownerId) {
-        ArrayList<Car> query = new ArrayList<Car>();
+        ArrayList<Car> query = new ArrayList<>();
 
         for (Car car : cars) {
             if (car.getOwnerId() == ownerId)
@@ -36,10 +27,6 @@ public final class Api {
         }
 
         return null;
-    }
-
-    public static Revisions getCarRevisions(int carId) {
-        return cars[carId - 1].getRevisions();
     }
 
     // POST REQUESTS

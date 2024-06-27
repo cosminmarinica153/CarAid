@@ -1,4 +1,0 @@
-{id='1', first_name='Testing ', last_name='test', age='21'}
-{id='2', first_name='Another', last_name='Test', age='44'}
-{id='3', first_name='Test ', last_name='re run', age='22'}
-{id='4', first_name='Cosmin ', last_name='Tester', age='33'}
