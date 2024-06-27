@@ -101,20 +101,35 @@ public final class Data {
     }
 
     // Methods to update data
-    public static boolean updateOwnerData(Owner owner){
+    public static boolean updateOwnerData(Owner[] owners){
+        try {
+            FileWriter myWriter = new FileWriter("data/owners.txt", true);
+            for(Owner owner : owners){
+                myWriter.write(owner.toString());
+                myWriter.write("\n");
+            }
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving owner data.");
+            return false;
+        }
+
         return true;
     }
 
-    public static boolean updateCarData(Car car){
-        return true;
-    }
+    public static boolean updateCarData(Car[] cars){
+        try {
+            FileWriter myWriter = new FileWriter("data/cars.txt", true);
+            for(Car car : cars){
+                myWriter.write(car.toString());
+                myWriter.write("\n");
+            }
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving owner data.");
+            return false;
+        }
 
-    // Methods to delete data
-    public static boolean deleteOwnerData(Owner owner){
-        return true;
-    }
-
-    public static boolean deleteCarData(Car car){
         return true;
     }
 }

@@ -9,7 +9,12 @@ public final class Api {
 
     // GET REQUESTS
     public static Owner getOwner(int id) {
-        return owners[id - 1];
+        for (Owner owner : owners) {
+            if (owner.getId() == id)
+                return owner;
+        }
+
+        return null;
     }
 
     public static Car[] getOwnerCars(int ownerId){
@@ -24,7 +29,12 @@ public final class Api {
     }
 
     public static Car getCar(int id) {
-        return cars[id - 1];
+        for (Car car : cars) {
+            if(car.getId() == id)
+                return car;
+        }
+
+        return null;
     }
 
     public static Revisions getCarRevisions(int carId) {
@@ -48,19 +58,49 @@ public final class Api {
 
     // PUT REQUESTS
     public static boolean updateOwner(Owner owner){
-        return Data.updateOwnerData(owner);
+        for(int i = 0; i < owners.length; i++){
+            if(owner.getId() == owners[i].getId())
+                owners[i] = owner;
+        }
+
+        return Data.updateOwnerData(owners);
     }
 
     public static boolean updateCar(Car car){
-        return Data.updateCarData(car);
+        for(int i = 0; i < cars.length; i++){
+            if(car.getId() == cars[i].getId())
+                cars[i] = car;
+        }
+
+        return Data.updateCarData(cars);
     }
 
     // DELETE REQUESTS
     public static boolean deleteOwner(int ownerId){
-        return Data.deleteOwnerData(getOwner(ownerId));
+        Owner[] newOwners = new Owner[owners.length - 1];
+
+
+        for(int i = 0; i < owners.length; i++){
+            if(ownerId != owners[i].getId())
+                newOwners[i] = owners[i];
+        }
+
+        owners = newOwners;
+
+        return Data.updateOwnerData(owners);
     }
 
     public static boolean deleteCar(int carId){
-        return Data.deleteCarData(getCar(carId));
+        Car[] newCars = new Car[cars.length - 1];
+
+
+        for(int i = 0; i < cars.length; i++){
+            if(carId != cars[i].getId())
+                newCars[i] = cars[i];
+        }
+
+        cars = newCars;
+
+        return Data.updateCarData(cars);
     }
 }

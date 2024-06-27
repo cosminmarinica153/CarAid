@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class Car {
     private static int NEXT_ID = 1;
     private final int id;
-    private final int ownerId;
+    private int ownerId;
     private String make;
     private String model;
     private int year;
@@ -37,6 +37,8 @@ public class Car {
     public int getId() { return id; }
 
     public int getOwnerId() { return ownerId; }
+
+    public void setOwnerId(int ownerId) { this.ownerId = ownerId; }
 
     public String getMake() { return make; }
 
