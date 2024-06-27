@@ -2,10 +2,10 @@ package obj;
 
 public class Revisions {
     // Recommend changes
-    private final int ENGINE_OIL = 20000;
-    private final int TRANSMISSION_OIL = 60000;
-    private final int BRAKE_PADS = 30000;
-    private final int BRAKE_FLUID = 60000;
+    public static final int ENGINE_OIL = 20000;
+    public static final int TRANSMISSION_OIL = 60000;
+    public static final int BRAKE_PADS = 30000;
+    public static final int BRAKE_FLUID = 60000;
 
     private int[] engineOil;
     private int[] transmissionOil;

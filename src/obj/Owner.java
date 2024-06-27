@@ -56,15 +56,15 @@ public class Owner {
     @Override
     public String toString() {
         return "{" +
-                        "id='" + id + '\'' +
-                        ", first_name='" + first_name + '\'' +
-                        ", last_name='" + last_name + '\'' +
-                        ", age='" + age +
-                        "'}";
+                "id='" + id + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", age='" + age +
+                "'}";
     }
 
     // This method also helps to keep the id in order
-    public static Owner toOwner(String s){
+    public static Owner toOwner(String s) {
         // Trim the string to exclude the userId (it will get incremented automatically)
         // and to also exclude the {}
         s = s.substring(8, s.length() - 1);
@@ -79,7 +79,8 @@ public class Owner {
         // We will add all the matched values to an array list in the correct order
         while (matcher.find() && val.size() < 4) {
             val.add(matcher.group(1));
-        };
+        }
+        ;
 
         // Preparing the attributes for the return
         String first_name = val.get(0);

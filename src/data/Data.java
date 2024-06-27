@@ -11,7 +11,7 @@ import obj.*;
 
 public final class Data {
     // Methods to load data
-    public static Owner[] loadOwners(){
+    public static Owner[] loadOwners() {
         ArrayList<Owner> owners = new ArrayList<>();
 
         try {
@@ -26,12 +26,12 @@ public final class Data {
             myReader.close();
 
             // If the file is empty we can return an empty owner array
-            if(data.isEmpty())
+            if (data.isEmpty())
                 return new Owner[0];
 
             String[] formatted = data.split("\n");
 
-            for(String line: formatted){
+            for (String line : formatted) {
                 owners.add(Owner.toOwner(line));
             }
         } catch (FileNotFoundException e) {
@@ -41,7 +41,7 @@ public final class Data {
         return owners.toArray(new Owner[owners.size()]);
     }
 
-    public static Car[] loadCars(){
+    public static Car[] loadCars() {
         ArrayList<Car> cars = new ArrayList<>();
 
         try {
@@ -56,12 +56,12 @@ public final class Data {
             myReader.close();
 
             // If the file is empty we can return an empty car array
-            if(data.isEmpty())
+            if (data.isEmpty())
                 return new Car[0];
 
             String[] formatted = data.split("\n");
 
-            for(String line: formatted){
+            for (String line : formatted) {
                 cars.add(Car.toCar(line));
             }
         } catch (FileNotFoundException e) {
@@ -72,7 +72,7 @@ public final class Data {
     }
 
     // Methods to save data
-    public static boolean saveOwnerData(Owner owner){
+    public static boolean saveOwnerData(Owner owner) {
         try {
             FileWriter myWriter = new FileWriter("data/owners.txt", true);
             myWriter.write(owner.toString());
@@ -86,7 +86,7 @@ public final class Data {
         return true;
     }
 
-    public static boolean saveCarData(Car car){
+    public static boolean saveCarData(Car car) {
         try {
             FileWriter myWriter = new FileWriter("data/cars.txt", true);
             myWriter.write(car.toString());
@@ -101,10 +101,10 @@ public final class Data {
     }
 
     // Methods to update data
-    public static boolean updateOwnerData(Owner[] owners){
+    public static boolean updateOwnerData(Owner[] owners) {
         try {
-            FileWriter myWriter = new FileWriter("data/owners.txt", true);
-            for(Owner owner : owners){
+            FileWriter myWriter = new FileWriter("data/owners.txt");
+            for (Owner owner : owners) {
                 myWriter.write(owner.toString());
                 myWriter.write("\n");
             }
@@ -117,10 +117,10 @@ public final class Data {
         return true;
     }
 
-    public static boolean updateCarData(Car[] cars){
+    public static boolean updateCarData(Car[] cars) {
         try {
-            FileWriter myWriter = new FileWriter("data/cars.txt", true);
-            for(Car car : cars){
+            FileWriter myWriter = new FileWriter("data/cars.txt");
+            for (Car car : cars) {
                 myWriter.write(car.toString());
                 myWriter.write("\n");
             }

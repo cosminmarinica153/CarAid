@@ -8,8 +8,10 @@ import java.util.Scanner;
 public final class UI {
     private static Scanner input = new Scanner(System.in);
 
-    private static Owner currentOwner;
-    private static Car currentCar;
+    // Set the current owner and car to a default value
+    // This way we will initiate the Api.owners and Api.cars
+    private static Owner currentOwner = Api.owners[0];
+    private static Car currentCar = Api.cars[0];
 
     public static String mainMenu() {
         while (true) {
@@ -73,7 +75,7 @@ public final class UI {
                 case 7:
                     return "main_menu";
                 case 8:
-                    if(deleteOwner().equals("main_menu"))
+                    if (deleteOwner().equals("main_menu"))
                         return "main_menu";
                     break;
                 case 9:
@@ -127,18 +129,19 @@ public final class UI {
             return "main_menu";
         }
 
-        int idx = 1;
-        for (Owner owner : Api.owners) {
-            System.out.println(idx++ + ". " + owner.getFirst_name() + " " + owner.getLast_name());
+        int i;
+        for (i = 0; i < Api.owners.length; i++) {
+            System.out.println((i + 1) + ". " + Api.owners[i].getFirst_name() + " " + Api.owners[i].getLast_name());
         }
 
         int id = input.nextInt();
+        input.nextLine();
 
-        if (id >= idx) {
+        if (id > Api.owners.length) {
             System.out.println("The user selected does not exist!");
             return chooseOwner();
         }
-        currentOwner = Api.getOwner(id);
+        currentOwner = Api.owners[id - 1];
 
         return "owner_menu";
     }
@@ -154,18 +157,18 @@ public final class UI {
 
         System.out.println("Please provide your age: ");
         int age = input.nextInt();
+        input.nextLine();
 
         Owner newOwner = new Owner(firstName, lastName, age);
 
         if (!Api.addOwner(newOwner))
             System.out.println("Something went wrong!");
 
-        input.nextLine();
         return "main_menu";
     }
 
     public static void updateOwner() {
-        while(true){
+        while (true) {
             System.out.println("What would you like to update?");
             System.out.println("1. My first name");
             System.out.println("2. My last name");
@@ -188,7 +191,7 @@ public final class UI {
                     currentOwner.setAge(input.nextInt());
                     break;
                 case 4:
-                    if(!Api.updateOwner(currentOwner))
+                    if (!Api.updateOwner(currentOwner))
                         System.out.println("Something went wrong! Please try again!");
                     else
                         return;
@@ -204,11 +207,11 @@ public final class UI {
         String ans = input.nextLine();
 
         if (ans.equalsIgnoreCase("y")) {
-            if(!Api.deleteOwner(currentOwner.getId()))
+            if (!Api.deleteOwner(currentOwner.getId()))
                 System.out.println("Something went wrong!");
 
             return "main_menu";
-        }else
+        } else
             return "";
     }
 
@@ -237,33 +240,51 @@ public final class UI {
 
         Car[] ownerCars = Api.getOwnerCars(currentOwner.getId());
 
-        int next;
+        int last;
         for (Car car : ownerCars) {
+            int carKm = car.getKilometers();
             boolean alert = false;
-            System.out.println("For your " + car.getMake() + " " + car.getModel() + " " + car.getYear() + " ");
+            System.out.println("For your " + car.getMake() + " " + car.getModel() + " " + car.getYear() + " with " +
+                                car.getKilometers() + " km");
 
-            next = car.getNextOilChange();
-            if (next < 2000) {
+            last = car.getLastOilChange();
+            if(carKm - last < 2000){
                 alert = true;
-                System.out.println("Next engine oil change due in " + next + " km");
+                System.out.println("Next engine oil change due in " + (carKm - last) + " km");
+            } else if (carKm - last > Revisions.ENGINE_OIL){
+                alert = true;
+                System.out.println("!!! --- You missed your engine oil change by " +
+                                    (carKm - last + Revisions.ENGINE_OIL) + " km --- !!!");
             }
 
-            next = car.getNextTransmissionOilChange();
-            if (next < 2000) {
+            last = car.getLastTransmissionOilChange();
+            if(carKm - last < 2000){
                 alert = true;
-                System.out.println("Next transmission oil change due in " + next + " km");
+                System.out.println("Next transmission oil change due in " + (carKm - last) + " km");
+            } else if (carKm - last > Revisions.TRANSMISSION_OIL){
+                alert = true;
+                System.out.println("!!! --- You missed your transmission oil change by " +
+                                    (carKm - last + Revisions.TRANSMISSION_OIL) + " km --- !!!");
             }
 
-            next = car.getNextBreakPadsChange();
-            if (next < 2000) {
+            last = car.getLastBreakPadsChange();
+            if(carKm - last < 2000){
                 alert = true;
-                System.out.println("Next brake pad change due in " + next + " km");
+                System.out.println("Next break pads change due in " + (carKm - last) + " km");
+            } else if (carKm - last > Revisions.BRAKE_PADS){
+                alert = true;
+                System.out.println("!!! --- You missed your brake pads change by " +
+                                    (carKm - last + Revisions.BRAKE_PADS) + " km --- !!!");
             }
 
-            next = car.getNextBrakeFluidChange();
-            if (next < 2000) {
+            last = car.getLastBrakeFluidChange();
+            if(carKm - last < 2000){
                 alert = true;
-                System.out.println("Next brake fluid change due in " + next + " km");
+                System.out.println("Next brake fluid change due in " + (carKm - last) + " km");
+            } else if (carKm - last > Revisions.BRAKE_FLUID){
+                alert = true;
+                System.out.println("!!! --- You missed your brake fluid change by " +
+                                    (carKm - last + Revisions.BRAKE_FLUID) + " km --- !!!");
             }
 
             if (!alert)
@@ -279,19 +300,20 @@ public final class UI {
 
         Car[] ownerCars = Api.getOwnerCars(currentOwner.getId());
 
-        int idx = 1;
-        for (Car car : ownerCars) {
-            System.out.println(idx++ + ". " + car.getMake() + " " + car.getModel() + " " + car.getYear());
+        int i;
+        for (i = 0; i < ownerCars.length; i++) {
+            System.out.println((i + 1) + ". " + ownerCars[i].getMake() + " " + ownerCars[i].getModel() + " " + ownerCars[i].getYear());
         }
 
         int id = input.nextInt();
+        input.nextLine();
 
-        if (id >= idx) {
+        if (id > ownerCars.length) {
             System.out.println("The car selected does not exist!");
             chooseCar();
         }
 
-        currentCar = Api.getOwnerCars(currentOwner.getId())[id - 1];
+        currentCar = ownerCars[id - 1];
     }
 
     public static void createNewCar() {
@@ -308,10 +330,11 @@ public final class UI {
 
         System.out.println("Provide the kilometers of the car: ");
         int kilometers = input.nextInt();
+        input.nextLine();
 
         Revisions revisions = new Revisions();
 
-        Car car = new Car(0 ,make, model, year, kilometers, revisions);
+        Car car = new Car(0, make, model, year, kilometers, revisions);
 
         Api.addCar(car);
     }
@@ -319,17 +342,20 @@ public final class UI {
     public static void deleteCar() {
         System.out.println("Which care would you like to delete?");
 
-        int idx = 1;
-
-        for(Car car : Api.cars)
-            System.out.println(idx++ + ". " + car.getMake() + " " + car.getModel() + " " + car.getYear());
-
-        int id = input.nextInt();
-        if (id >= idx) {
-            System.out.println("The car selected does not exist!");
+        int i;
+        for (i = 0; i < Api.cars.length; i++) {
+            System.out.println((i + 1) + ". " + Api.cars[i].getMake() + " " + Api.cars[i].getModel() + " " + Api.cars[i].getYear());
         }
 
-        if(!Api.deleteCar(id))
+        int id = input.nextInt();
+        input.nextLine();
+
+        if (id > Api.cars.length) {
+            System.out.println("The car selected does not exist!");
+            deleteCar();
+        }
+
+        if (!Api.deleteCar(id))
             System.out.println("Something went wrong!");
     }
 
@@ -337,14 +363,17 @@ public final class UI {
     public static void buyCar() {
         System.out.println("Which car would you like to see?");
 
-        int idx = 1;
-        for (Car car : Api.cars)
-            System.out.println(idx++ + ". " + car.getMake() + " " + car.getModel() + " " + car.getYear());
+        int i;
+        for (i = 0; i < Api.cars.length; i++) {
+            System.out.println((i + 1) + ". " + Api.cars[i].getMake() + " " + Api.cars[i].getModel() + " " + Api.cars[i].getYear());
+        }
 
         int id = input.nextInt();
+        input.nextLine();
 
-        if (id >= idx) {
-            System.out.println("The user selected does not exist!");
+        if (id > Api.cars.length) {
+            System.out.println("The car selected does not exist!");
+            deleteCar();
         }
 
         currentCar = Api.getCar(id);
@@ -356,7 +385,7 @@ public final class UI {
 
         if (ans.equalsIgnoreCase("y")) {
             currentCar.setOwnerId(currentOwner.getId());
-            if(!Api.updateCar(currentCar))
+            if (!Api.updateCar(currentCar))
                 System.out.println("Something went wrong!");
         }
     }
@@ -372,7 +401,7 @@ public final class UI {
         String ans = input.nextLine();
 
         if (ans.equalsIgnoreCase("y")) {
-            if(!Api.deleteCar(currentCar.getId()))
+            if (!Api.deleteCar(currentCar.getId()))
                 System.out.println("Something went wrong!");
         }
     }
@@ -387,6 +416,7 @@ public final class UI {
 
         System.out.println("How much would you like to drive? (km)");
         int km = input.nextInt();
+        input.nextLine();
 
         currentCar.setKilometers(currentCar.getKilometers() + km);
 
@@ -400,16 +430,23 @@ public final class UI {
             return;
         }
 
+        System.out.println("Please choose the car you want to check.");
+
         chooseCar();
 
         Revisions revisions = currentCar.getRevisions();
 
-        System.out.println("For your " + currentCar.getMake() + " " + currentCar.getModel() + " " + currentCar.getYear());
+        System.out.println("For your " + currentCar.getMake() + " " + currentCar.getModel() + " " +
+                            currentCar.getYear() + " that has " + currentCar.getKilometers() + " km");
 
-        System.out.println("Your last oil change was " + revisions.getEngineOil()[revisions.getEngineOil().length - 1]);
-        System.out.println("Your last transmission oil change was " + revisions.getTransmissionOil()[revisions.getTransmissionOil().length - 1]);
-        System.out.println("Your last break pads change was " + revisions.getBrakePads()[revisions.getBrakePads().length - 1]);
-        System.out.println("Your last break fluid change was " + revisions.getBrakeFluid()[revisions.getBrakeFluid().length - 1]);
+        System.out.println("Your last oil change was " +
+                            revisions.getEngineOil()[revisions.getEngineOil().length - 1]);
+        System.out.println("Your last transmission oil change was " +
+                            revisions.getTransmissionOil()[revisions.getTransmissionOil().length - 1]);
+        System.out.println("Your last break pads change was " +
+                            revisions.getBrakePads()[revisions.getBrakePads().length - 1]);
+        System.out.println("Your last break fluid change was " +
+                            revisions.getBrakeFluid()[revisions.getBrakeFluid().length - 1]);
 
         System.out.println();
         System.out.println("Would you like more details? (Y/n)");

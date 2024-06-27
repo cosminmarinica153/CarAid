@@ -1,6 +1,3 @@
-import data.Api;
-import obj.Car;
-import obj.Revisions;
 import util.UI;
 
 public class Main {
@@ -9,7 +6,7 @@ public class Main {
 
         boolean run = true;
         while (run) {
-            switch (action){
+            switch (action) {
                 case "main_menu":
                     action = UI.mainMenu();
                     break;
