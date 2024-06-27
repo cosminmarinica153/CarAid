@@ -1,4 +1,5 @@
 package data;
+
 import obj.*;
 
 import java.util.ArrayList;
@@ -9,14 +10,19 @@ public final class Api {
 
     // GET REQUESTS
     public static Owner getOwner(int id) {
-        return owners[id - 1];
+        for (Owner owner : owners) {
+            if (owner.getId() == id)
+                return owner;
+        }
+
+        return null;
     }
 
-    public static Car[] getOwnerCars(int ownerId){
+    public static Car[] getOwnerCars(int ownerId) {
         ArrayList<Car> query = new ArrayList<Car>();
 
-        for(Car car : cars){
-            if(car.getOwnerId() == ownerId)
+        for (Car car : cars) {
+            if (car.getOwnerId() == ownerId)
                 query.add(car);
         }
 
@@ -24,7 +30,12 @@ public final class Api {
     }
 
     public static Car getCar(int id) {
-        return cars[id - 1];
+        for (Car car : cars) {
+            if (car.getId() == id)
+                return car;
+        }
+
+        return null;
     }
 
     public static Revisions getCarRevisions(int carId) {
@@ -32,7 +43,7 @@ public final class Api {
     }
 
     // POST REQUESTS
-    public static boolean addOwner(Owner owner){
+    public static boolean addOwner(Owner owner) {
         Owner[] newOwners = new Owner[owners.length + 1];
 
         System.arraycopy(owners, 0, newOwners, 0, owners.length);
@@ -42,25 +53,58 @@ public final class Api {
         return Data.saveOwnerData(owner);
     }
 
-    public static boolean addCar(Car car){
+    public static boolean addCar(Car car) {
         return Data.saveCarData(car);
     }
 
     // PUT REQUESTS
-    public static boolean updateOwner(Owner owner){
-        return Data.updateOwnerData(owner);
+    public static boolean updateOwner(Owner owner) {
+        for (int i = 0; i < owners.length; i++) {
+            if (owner.getId() == owners[i].getId())
+                owners[i] = owner;
+        }
+
+        return Data.updateOwnerData(owners);
     }
 
-    public static boolean updateCar(Car car){
-        return Data.updateCarData(car);
+    public static boolean updateCar(Car car) {
+        for (int i = 0; i < cars.length; i++) {
+            if (car.getId() == cars[i].getId())
+                cars[i] = car;
+        }
+
+        return Data.updateCarData(cars);
     }
 
     // DELETE REQUESTS
-    public static boolean deleteOwner(int ownerId){
-        return Data.deleteOwnerData(getOwner(ownerId));
+    public static boolean deleteOwner(int ownerId) {
+        Owner[] newOwners = new Owner[owners.length - 1];
+
+
+        for (int i = 0; i < owners.length; i++) {
+            if (ownerId != owners[i].getId()) {
+                newOwners[i] = owners[i];
+                owners[i] = null;
+            }
+        }
+
+        owners = newOwners;
+
+        return Data.updateOwnerData(owners);
     }
 
-    public static boolean deleteCar(int carId){
-        return Data.deleteCarData(getCar(carId));
+    public static boolean deleteCar(int carId) {
+        Car[] newCars = new Car[cars.length - 1];
+
+        for (int i = 0; i < cars.length; i++) {
+            if (carId != cars[i].getId()) {
+                newCars[i] = cars[i];
+                cars[i] = null;
+            }
+        }
+
+        cars = newCars;
+
+        return Data.updateCarData(cars);
     }
 }

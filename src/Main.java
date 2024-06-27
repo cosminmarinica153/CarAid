@@ -6,7 +6,7 @@ public class Main {
 
         boolean run = true;
         while (run) {
-            switch (action){
+            switch (action) {
                 case "main_menu":
                     action = UI.mainMenu();
                     break;

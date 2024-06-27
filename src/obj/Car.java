@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class Car {
     private static int NEXT_ID = 1;
     private final int id;
-    private final int ownerId;
+    private int ownerId;
     private String make;
     private String model;
     private int year;
@@ -34,33 +34,61 @@ public class Car {
         this.revisions = new Revisions();
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public int getOwnerId() { return ownerId; }
+    public int getOwnerId() {
+        return ownerId;
+    }
 
-    public String getMake() { return make; }
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
 
-    public void setMake(String make) { this.make = make; }
+    public String getMake() {
+        return make;
+    }
 
-    public String getModel() { return model; }
+    public void setMake(String make) {
+        this.make = make;
+    }
 
-    public void setModel(String model) { this.model = model; }
+    public String getModel() {
+        return model;
+    }
 
-    public int getYear() { return year; }
+    public void setModel(String model) {
+        this.model = model;
+    }
 
-    public void setYear(int year) { this.year = year; }
+    public int getYear() {
+        return year;
+    }
 
-    public int getKilometers() { return kilometers; }
+    public void setYear(int year) {
+        this.year = year;
+    }
 
-    public void setKilometers(int kilometers) { this.kilometers = kilometers; }
+    public int getKilometers() {
+        return kilometers;
+    }
 
-    public Revisions getRevisions() { return revisions; }
+    public void setKilometers(int kilometers) {
+        this.kilometers = kilometers;
+    }
 
-    public void setRevisions(Revisions revisions) { this.revisions = revisions; }
+    public Revisions getRevisions() {
+        return revisions;
+    }
+
+    public void setRevisions(Revisions revisions) {
+        this.revisions = revisions;
+    }
 
     @Override
     public String toString() {
-        return  "{" +
+        return "{" +
                 "id='" + id + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", make='" + make + '\'' +
@@ -71,7 +99,7 @@ public class Car {
                 "'}";
     }
 
-    public static Car toCar(String s){
+    public static Car toCar(String s) {
         // Trim the string to exclude the userId (it will get incremented automatically)
         // and to also exclude the {}
         s = s.substring(8, s.length() - 1);
@@ -82,8 +110,8 @@ public class Car {
         String attributesString = "";
         String revisionString = "";
 
-        for (int i = 0; i < s.length(); i++){
-            if(s.charAt(i) == '{'){
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '{') {
                 attributesString = s.substring(1, i - 13);
 
                 revisionString = s.substring(i, s.length() - 1);
@@ -103,7 +131,8 @@ public class Car {
         // We will add all the matched values to an array list in the correct order
         while (matcher.find()) {
             val.add(matcher.group(1));
-        };
+        }
+        ;
 
         // Prepare the attribute values
         int ownerId = Integer.parseInt(val.get(0));
@@ -122,7 +151,8 @@ public class Car {
         // We will add all the matched values to an array list in the correct order
         while (matcher.find()) {
             val.add(matcher.group(1));
-        };
+        }
+        ;
 
         // Preparing revisions attributes
         // We will parse the matched values by parsing the value string to an array list
@@ -133,7 +163,7 @@ public class Car {
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for(int i = 0; i < tempArr.length; i++)
+        for (int i = 0; i < tempArr.length; i++)
             arrList.add(Integer.parseInt(tempArr[i]));
         int[] engineOilChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -142,7 +172,7 @@ public class Car {
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for(int i = 0; i < tempArr.length; i++)
+        for (int i = 0; i < tempArr.length; i++)
             arrList.add(Integer.parseInt(tempArr[i]));
         int[] transmissionOilChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -151,7 +181,7 @@ public class Car {
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for(int i = 0; i < tempArr.length; i++)
+        for (int i = 0; i < tempArr.length; i++)
             arrList.add(Integer.parseInt(tempArr[i]));
         int[] brakePadsChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -160,7 +190,7 @@ public class Car {
         tempArr = temp.substring(1, temp.length() - 1).split(", ");
         arrList = new ArrayList<>();
 
-        for(int i = 0; i < tempArr.length; i++)
+        for (int i = 0; i < tempArr.length; i++)
             arrList.add(Integer.parseInt(tempArr[i]));
         int[] brakeFluidChanges = arrList.stream().mapToInt(Integer::intValue).toArray();
 
@@ -172,53 +202,53 @@ public class Car {
     }
 
     // Methods to check the next required changes
-    public int getNextOilChange(){
+    public int getLastOilChange() {
         int[] oilChanges = revisions.getEngineOil();
 
-        return kilometers - oilChanges[oilChanges.length - 1];
+        return oilChanges[oilChanges.length - 1];
     }
 
-    public int getNextTransmissionOilChange(){
+    public int getLastTransmissionOilChange() {
         int[] transmissionOilChanges = revisions.getTransmissionOil();
 
-        return kilometers - transmissionOilChanges[transmissionOilChanges.length - 1];
+        return transmissionOilChanges[transmissionOilChanges.length - 1];
     }
 
-    public int getNextBreakPadsChange(){
+    public int getLastBreakPadsChange() {
         int[] breakPadChanges = revisions.getBrakePads();
 
-        return kilometers - breakPadChanges[breakPadChanges.length - 1];
+        return breakPadChanges[breakPadChanges.length - 1];
     }
 
-    public int getNextBrakeFluidChange(){
+    public int getLastBrakeFluidChange() {
         int[] brakeFluidChanges = revisions.getBrakeFluid();
 
-        return kilometers - brakeFluidChanges[brakeFluidChanges.length - 1];
+        return brakeFluidChanges[brakeFluidChanges.length - 1];
     }
 
     // Methods to add a revision made
-    public void addEngineOilChange(int km){
+    public void addEngineOilChange(int km) {
         int[] arr = new int[revisions.getEngineOil().length + 1];
         arr[arr.length - 1] = km;
 
         revisions.setEngineOil(arr);
     }
 
-    public void addTransmissionOilChange(int km){
+    public void addTransmissionOilChange(int km) {
         int[] arr = new int[revisions.getTransmissionOil().length + 1];
         arr[arr.length - 1] = km;
 
         revisions.setEngineOil(arr);
     }
 
-    public void addBrakePadsChange(int km){
+    public void addBrakePadsChange(int km) {
         int[] arr = new int[revisions.getBrakePads().length + 1];
         arr[arr.length - 1] = km;
 
         revisions.setEngineOil(arr);
     }
 
-    public void addBrakeFluidChange(int km){
+    public void addBrakeFluidChange(int km) {
         int[] arr = new int[revisions.getBrakeFluid().length + 1];
         arr[arr.length - 1] = km;
 
