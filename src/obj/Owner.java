@@ -18,13 +18,6 @@ public class Owner {
         this.age = age;
     }
 
-    public Owner() {
-        this.id = NEXT_ID++;
-        this.first_name = "John";
-        this.last_name = "Doe";
-        this.age = 0;
-    }
-
     public int getId() {
         return id;
     }
@@ -80,7 +73,6 @@ public class Owner {
         while (matcher.find() && val.size() < 4) {
             val.add(matcher.group(1));
         }
-        ;
 
         // Preparing the attributes for the return
         String first_name = val.get(0);

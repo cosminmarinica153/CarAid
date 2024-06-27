@@ -6,14 +6,14 @@ import obj.*;
 import java.util.Scanner;
 
 public final class UI {
-    private static Scanner input = new Scanner(System.in);
+    private final static Scanner input = new Scanner(System.in);
 
     // Set the current owner and car to a default value
     // This way we will initiate the Api.owners and Api.cars
     private static Owner currentOwner = Api.owners[0];
     private static Car currentCar = Api.cars[0];
 
-    public static String mainMenu() {
+    public static void mainMenu() {
         while (true) {
             System.out.println("Welcome to CarAid!");
             System.out.println("1. Choose owner");
@@ -24,11 +24,13 @@ public final class UI {
             input.nextLine();
             switch (choice) {
                 case 1:
-                    return "choose_owner";
+                    chooseOwner();
+                    break;
                 case 2:
-                    return "create_owner";
+                    createNewOwner();
+                    break;
                 case 3:
-                    return "exit";
+                    return;
                 default:
                     System.out.println("Invalid choice");
                     break;
@@ -36,7 +38,7 @@ public final class UI {
         }
     }
 
-    public static String ownerMenu() {
+    public static void ownerMenu() {
         while (true) {
             System.out.println("Welcome " + currentOwner.getFirst_name() + "!");
             System.out.println("What would you like to do?");
@@ -73,16 +75,16 @@ public final class UI {
                     dealerShipMenu();
                     break;
                 case 7:
-                    return "main_menu";
+                    return;
                 case 8:
                     if (deleteOwner().equals("main_menu"))
-                        return "main_menu";
+                        return;
                     break;
                 case 9:
                     updateOwner();
                 default:
                     System.out.println("Invalid choice");
-                    return ownerMenu();
+                    break;
             }
         }
 
@@ -123,10 +125,10 @@ public final class UI {
     }
 
     // Dialog for interacting with the owner
-    public static String chooseOwner() {
+    public static void chooseOwner() {
         if (Api.owners.length == 0) {
             System.out.println("There are no owners!\n");
-            return "main_menu";
+            return;
         }
 
         int i;
@@ -139,14 +141,14 @@ public final class UI {
 
         if (id > Api.owners.length) {
             System.out.println("The user selected does not exist!");
-            return chooseOwner();
+            chooseOwner();
         }
         currentOwner = Api.owners[id - 1];
 
-        return "owner_menu";
+        ownerMenu();
     }
 
-    public static String createNewOwner() {
+    public static void createNewOwner() {
         System.out.println("Hello newcomer!\n");
 
         System.out.println("Please provide your first name: ");
@@ -163,8 +165,6 @@ public final class UI {
 
         if (!Api.addOwner(newOwner))
             System.out.println("Something went wrong!");
-
-        return "main_menu";
     }
 
     public static void updateOwner() {
@@ -245,46 +245,46 @@ public final class UI {
             int carKm = car.getKilometers();
             boolean alert = false;
             System.out.println("For your " + car.getMake() + " " + car.getModel() + " " + car.getYear() + " with " +
-                                car.getKilometers() + " km");
+                    car.getKilometers() + " km");
 
             last = car.getLastOilChange();
-            if(carKm - last < 2000){
+            if (carKm - last < 2000) {
                 alert = true;
                 System.out.println("Next engine oil change due in " + (carKm - last) + " km");
-            } else if (carKm - last > Revisions.ENGINE_OIL){
+            } else if (carKm - last > Revisions.ENGINE_OIL) {
                 alert = true;
                 System.out.println("!!! --- You missed your engine oil change by " +
-                                    (carKm - last + Revisions.ENGINE_OIL) + " km --- !!!");
+                        (carKm - last + Revisions.ENGINE_OIL) + " km --- !!!");
             }
 
             last = car.getLastTransmissionOilChange();
-            if(carKm - last < 2000){
+            if (carKm - last < 2000) {
                 alert = true;
                 System.out.println("Next transmission oil change due in " + (carKm - last) + " km");
-            } else if (carKm - last > Revisions.TRANSMISSION_OIL){
+            } else if (carKm - last > Revisions.TRANSMISSION_OIL) {
                 alert = true;
                 System.out.println("!!! --- You missed your transmission oil change by " +
-                                    (carKm - last + Revisions.TRANSMISSION_OIL) + " km --- !!!");
+                        (carKm - last + Revisions.TRANSMISSION_OIL) + " km --- !!!");
             }
 
             last = car.getLastBreakPadsChange();
-            if(carKm - last < 2000){
+            if (carKm - last < 2000) {
                 alert = true;
                 System.out.println("Next break pads change due in " + (carKm - last) + " km");
-            } else if (carKm - last > Revisions.BRAKE_PADS){
+            } else if (carKm - last > Revisions.BRAKE_PADS) {
                 alert = true;
                 System.out.println("!!! --- You missed your brake pads change by " +
-                                    (carKm - last + Revisions.BRAKE_PADS) + " km --- !!!");
+                        (carKm - last + Revisions.BRAKE_PADS) + " km --- !!!");
             }
 
             last = car.getLastBrakeFluidChange();
-            if(carKm - last < 2000){
+            if (carKm - last < 2000) {
                 alert = true;
                 System.out.println("Next brake fluid change due in " + (carKm - last) + " km");
-            } else if (carKm - last > Revisions.BRAKE_FLUID){
+            } else if (carKm - last > Revisions.BRAKE_FLUID) {
                 alert = true;
                 System.out.println("!!! --- You missed your brake fluid change by " +
-                                    (carKm - last + Revisions.BRAKE_FLUID) + " km --- !!!");
+                        (carKm - last + Revisions.BRAKE_FLUID) + " km --- !!!");
             }
 
             if (!alert)
@@ -336,7 +336,8 @@ public final class UI {
 
         Car car = new Car(0, make, model, year, kilometers, revisions);
 
-        Api.addCar(car);
+        if (!Api.addCar(car))
+            System.out.println("Something went wrong!");
     }
 
     public static void deleteCar() {
@@ -437,16 +438,16 @@ public final class UI {
         Revisions revisions = currentCar.getRevisions();
 
         System.out.println("For your " + currentCar.getMake() + " " + currentCar.getModel() + " " +
-                            currentCar.getYear() + " that has " + currentCar.getKilometers() + " km");
+                currentCar.getYear() + " that has " + currentCar.getKilometers() + " km");
 
         System.out.println("Your last oil change was " +
-                            revisions.getEngineOil()[revisions.getEngineOil().length - 1]);
+                revisions.getEngineOil()[revisions.getEngineOil().length - 1]);
         System.out.println("Your last transmission oil change was " +
-                            revisions.getTransmissionOil()[revisions.getTransmissionOil().length - 1]);
+                revisions.getTransmissionOil()[revisions.getTransmissionOil().length - 1]);
         System.out.println("Your last break pads change was " +
-                            revisions.getBrakePads()[revisions.getBrakePads().length - 1]);
+                revisions.getBrakePads()[revisions.getBrakePads().length - 1]);
         System.out.println("Your last break fluid change was " +
-                            revisions.getBrakeFluid()[revisions.getBrakeFluid().length - 1]);
+                revisions.getBrakeFluid()[revisions.getBrakeFluid().length - 1]);
 
         System.out.println();
         System.out.println("Would you like more details? (Y/n)");
@@ -461,28 +462,28 @@ public final class UI {
         Revisions revisions = currentCar.getRevisions();
         int[] changes;
 
-        changes = currentCar.getRevisions().getEngineOil();
+        changes = revisions.getEngineOil();
         System.out.print("Engine oil was changed at: ");
-        for (int i = 0; i < changes.length; i++)
-            System.out.print(changes[i] + " km, ");
+        for (int change : changes)
+            System.out.print(change + " km, ");
         System.out.println();
 
-        changes = currentCar.getRevisions().getTransmissionOil();
+        changes = revisions.getTransmissionOil();
         System.out.print("Transmission oil was changed at: ");
-        for (int i = 0; i < changes.length; i++)
-            System.out.print(changes[i] + " km, ");
+        for (int change : changes)
+            System.out.print(change + " km, ");
         System.out.println();
 
-        changes = currentCar.getRevisions().getBrakePads();
+        changes = revisions.getBrakePads();
         System.out.print("Brake pads were changed at: ");
-        for (int i = 0; i < changes.length; i++)
-            System.out.print(changes[i] + " km, ");
+        for (int change : changes)
+            System.out.print(change + " km, ");
         System.out.println();
 
-        changes = currentCar.getRevisions().getBrakeFluid();
+        changes = revisions.getBrakeFluid();
         System.out.print("Brake fluid was changed at: ");
-        for (int i = 0; i < changes.length; i++)
-            System.out.print(changes[i] + " km, ");
+        for (int change : changes)
+            System.out.print(change + " km, ");
         System.out.println();
     }
 }
