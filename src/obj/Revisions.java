@@ -1,17 +1,20 @@
 package obj;
 
+// This class is meant to hold a record of a car maintenance
 public class Revisions {
-    // Recommend changes
+    // Changes recommended at km, represented as constants
     public static final int ENGINE_OIL = 20000;
     public static final int TRANSMISSION_OIL = 60000;
     public static final int BRAKE_PADS = 30000;
     public static final int BRAKE_FLUID = 60000;
 
+    // Attributes
     private int[] engineOil;
     private int[] transmissionOil;
     private int[] brakePads;
     private int[] brakeFluid;
 
+    // Constructors
     public Revisions(int[] engineOil, int[] transmissionOil, int[] brakePads, int[] brakeFluid) {
         this.engineOil = engineOil;
         this.transmissionOil = transmissionOil;
@@ -26,6 +29,7 @@ public class Revisions {
         brakeFluid = new int[1];
     }
 
+    // Getters and Setters
     public int[] getEngineOil() {
         return engineOil;
     }
@@ -58,6 +62,8 @@ public class Revisions {
         this.brakeFluid = brakeFluid;
     }
 
+    // Overwritten .toString() method that returns the revisions in the following format:
+    // {engineOilChanges='[]', transmissionOilChanges='[]', brakePadsChanges='[]', brakeFluidChanges='[]'}
     @Override
     public String toString() {
         String format = "{";
