@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 public class Car {
     private static int NEXT_ID = 1;
+
+    // Attributes
     private final int id;
     private int ownerId;
     private final String make;
@@ -14,6 +16,7 @@ public class Car {
     private int kilometers;
     private final Revisions revisions;
 
+    // Constructor
     public Car(int ownerId, String make, String model, int year, int kilometers, Revisions revisions) {
         this.id = NEXT_ID++;
         this.ownerId = ownerId;
@@ -24,6 +27,7 @@ public class Car {
         this.revisions = revisions;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -60,6 +64,7 @@ public class Car {
         return revisions;
     }
 
+    // Overwritten .toString() method
     @Override
     public String toString() {
         return "{" +
@@ -73,6 +78,8 @@ public class Car {
                 "'}";
     }
 
+    // Method to transform the string from data to a valid owner object
+    // This method also helps to keep the id in order
     public static Car toCar(String s) {
         // Trim the string to exclude the userId (it will get incremented automatically)
         // and to also exclude the {}

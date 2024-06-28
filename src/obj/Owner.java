@@ -6,11 +6,14 @@ import java.util.regex.Pattern;
 
 public class Owner {
     private static int NEXT_ID = 1;
+
+    // Attributes
     private final int id;
     private String first_name;
     private String last_name;
     private int age;
 
+    // Constructor
     public Owner(String first_name, String last_name, int age) {
         this.id = NEXT_ID++;
         this.first_name = first_name;
@@ -18,6 +21,7 @@ public class Owner {
         this.age = age;
     }
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -46,6 +50,7 @@ public class Owner {
         this.age = age;
     }
 
+    // Overwritten .toStringMethod()
     @Override
     public String toString() {
         return "{" +
@@ -56,6 +61,7 @@ public class Owner {
                 "'}";
     }
 
+    // Method to transform the string from data to a valid owner object
     // This method also helps to keep the id in order
     public static Owner toOwner(String s) {
         // Trim the string to exclude the userId (it will get incremented automatically)
