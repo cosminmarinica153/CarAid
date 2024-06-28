@@ -8,8 +8,8 @@ public final class App {
 
     // Set the current owner and car to a default value
     // This way we will initiate the Api.owners and Api.cars
-    private static Owner currentOwner = Api.owners[0];
-    private static Car currentCar = Api.cars[0];
+    private static Owner currentOwner = (Api.owners.length) > 0 ? Api.owners[0] : null;
+    private static Car currentCar = (Api.cars.length) > 0 ? Api.cars[0] : null;
 
     public static void run(){
         mainMenu();
@@ -52,9 +52,10 @@ public final class App {
             System.out.println("4. Drive");
             System.out.println("5. Maintenance");
             System.out.println("6. Dealership");
-            System.out.println("7. Return to main menu");
-            System.out.println("8. Delete owner");
-            System.out.println("9. Update owner");
+            System.out.println("7. Mechanic");
+            System.out.println("8. Return to main menu");
+            System.out.println("9. Delete owner");
+            System.out.println("10. Update owner");
 
             int choice = input.nextInt();
             input.nextLine();
@@ -78,12 +79,15 @@ public final class App {
                     dealerShipMenu();
                     break;
                 case 7:
-                    return;
+                    mechanicMenu();
+                    break;
                 case 8:
+                    return;
+                case 9:
                     if (deleteOwner().equals("main_menu"))
                         return;
                     break;
-                case 9:
+                case 10:
                     updateOwner();
                 default:
                     System.out.println("Invalid choice");
@@ -120,6 +124,49 @@ public final class App {
                 case 5:
                     deleteCar();
                     break;
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+        }
+    }
+
+    public static void mechanicMenu(){
+        System.out.println("Welcome to SecretWeapon!");
+        System.out.println("Which car would you like to work on?");
+
+        chooseCar();
+        while (true) {
+            System.out.println("What would you like to do to your " + currentCar.getMake() + " " +
+                    currentCar.getModel() + " " + currentCar.getYear() + "?");
+            System.out.println("1. Engine oil change");
+            System.out.println("2. Transmission oil change");
+            System.out.println("3. Brake pads change");
+            System.out.println("4. Brake fluid change");
+            System.out.println("5. Choose another car");
+            System.out.println("6. Leave");
+
+            int choice = input.nextInt();
+            input.nextLine();
+
+            switch (choice) {
+                case 1:
+                    engineOilChange();
+                    break;
+                case 2:
+                    transmissionOilChange();
+                    break;
+                case 3:
+                    brakePadsChange();
+                    break;
+                case 4:
+                    brakeFluidChange();
+                    break;
+                case 5:
+                    mechanicMenu();
+                    break;
+                case 6:
+                    return;
                 default:
                     System.out.println("Invalid choice");
                     break;
@@ -203,11 +250,6 @@ public final class App {
                     System.out.println("Invalid choice");
             }
         }
-    }
-
-    // TODO
-    public static void updateCar(){
-
     }
 
     public static String deleteOwner() {
@@ -431,7 +473,7 @@ public final class App {
         System.out.println();
     }
 
-    // Car related dialogs
+    // DealerShip related dialogs
     public static void buyCar() {
         System.out.println("Which car would you like to see?");
 
@@ -496,8 +538,28 @@ public final class App {
             System.out.println("Your car could not start");
     }
 
-    // TODO
-    public static void addRevision(){
+    // Mechanic related dialog
+    public static void engineOilChange(){
+        currentCar.addEngineOilChange(currentCar.getKilometers());
 
+        System.out.println("The revision was successful");
+    }
+
+    public static void transmissionOilChange(){
+        currentCar.addTransmissionOilChange(currentCar.getKilometers());
+
+        System.out.println("The revision was successful");
+    }
+
+    public static void brakePadsChange(){
+        currentCar.addBrakePadsChange(currentCar.getKilometers());
+
+        System.out.println("The revision was successful");
+    }
+
+    public static void brakeFluidChange(){
+        currentCar.addBrakeFluidChange(currentCar.getKilometers());
+
+        System.out.println("The revision was successful");
     }
 }

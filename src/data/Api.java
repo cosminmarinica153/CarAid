@@ -84,6 +84,10 @@ public final class Api {
     public static boolean deleteOwner(int ownerId) {
         Owner[] newOwners = new Owner[owners.length - 1];
 
+        // Remove owner cars
+        for(Car car : getOwnerCars(ownerId))
+            car.setOwnerId(0);
+
         // We copy the owners array into the newOwners, and we skip
         // the owner that we want to delete
         for (int i = 0; i < owners.length; i++) {
